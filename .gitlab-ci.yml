@@ -25,7 +25,7 @@ variables:
     - colcon test-result
   only:
     - merge_requests
-    - master
+    - as/master
 
 .build_cross_vars: &build_cross_vars
     AUTOWARE_TARGET_ARCH: aarch64
@@ -35,7 +35,7 @@ variables:
 .build_cross: &build_cross_common
   script:
     - apt-get update && apt-get install -y python3-vcstool git build-essential wget
-    - wget https://gitlab.com/autowarefoundation/autoware.ai/autoware/raw/master/ros/cross_toolchain.cmake
+    - wget https://gitlab.com/astuff/autoware.ai/autoware/raw/as/master/ros/cross_toolchain.cmake
     - source ${AUTOWARE_SYSROOT}/opt/ros/${ROS_DISTRO}/setup.bash
     - colcon build
           --merge-install
@@ -46,7 +46,7 @@ variables:
           -DCMAKE_FIND_ROOT_PATH=${CI_PROJECT_DIR}/install
   only:
     - merge_requests
-    - master
+    - as/master
 
 build_kinetic:
   image: autoware/autoware:bleedingedge-kinetic-base
