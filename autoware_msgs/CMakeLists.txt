@@ -72,7 +72,7 @@ add_message_files(
 )
 
 add_service_files(
-  FILES ReognizeLightState.srv
+  FILES RecognizeLightState.srv
 )
 
 ## Generate added messages and services with any dependencies listed here
