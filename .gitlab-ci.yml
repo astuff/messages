@@ -45,21 +45,10 @@ variables:
     - merge_requests
     - as/master
 
-build_kinetic:
-  image: autonomoustuff/autoware:bleedingedge-kinetic-base
-  <<: *build_common
-
 build_melodic:
   image: autonomoustuff/autoware:bleedingedge-melodic-base
   <<: *build_common
-    
-build_kinetic_cross:
-  image: autonomoustuff/autoware:${AUTOWARE_CROSS_TARGET_PLATFORM}-kinetic-bleedingedge
-  variables:
-    ROS_DISTRO: kinetic
-    <<: *build_cross_vars
-  <<: *build_cross_common
-    
+
 build_melodic_cross:
   image: autonomoustuff/autoware:${AUTOWARE_CROSS_TARGET_PLATFORM}-melodic-bleedingedge
   variables:
