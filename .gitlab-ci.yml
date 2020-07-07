@@ -17,10 +17,10 @@
     - colcon build --cmake-target tests --cmake-args -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage" -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage" -DCMAKE_BUILD_TYPE=Debug
     - colcon test
     - colcon test-result --verbose
-  only:
-    - merge_requests
-    - as/master
 
 build_melodic:
   image: autonomoustuff/autoware:bleedingedge-melodic-base
   <<: *build_common
+  only:
+    - merge_requests
+    - as/master
