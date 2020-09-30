@@ -1,6 +1,3 @@
-variables:
-  AUTOWARE_CROSS_TARGET_PLATFORM: generic-aarch64
-
 .build: &build_common
   before_script:
     - mkdir -p src_tmp/${CI_PROJECT_NAME} && mv `find -maxdepth 1 -not -name . -not -name src_tmp` src_tmp/${CI_PROJECT_NAME} && mv src_tmp/ src/
@@ -20,38 +17,10 @@ variables:
     - colcon build --cmake-target tests --cmake-args -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage" -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage" -DCMAKE_BUILD_TYPE=Debug
     - colcon test
     - colcon test-result --verbose
-  only:
-    - merge_requests
-    - as/master
-
-.build_cross_vars: &build_cross_vars
-    AUTOWARE_TARGET_ARCH: aarch64
-    AUTOWARE_TOOLCHAIN_FILE_PATH: $CI_PROJECT_DIR/cross_toolchain.cmake
-    AUTOWARE_SYSROOT: /sysroot/${AUTOWARE_CROSS_TARGET_PLATFORM}
-
-.build_cross: &build_cross_common
-  script:
-    - apt-get update && apt-get install -y python3-vcstool git build-essential wget
-    - wget https://gitlab.com/astuff/autoware.ai/autoware/raw/as/master/ros/cross_toolchain.cmake
-    - source ${AUTOWARE_SYSROOT}/opt/ros/${ROS_DISTRO}/setup.bash
-    - colcon build
-          --merge-install
-          --cmake-args
-          -DCMAKE_TOOLCHAIN_FILE=${AUTOWARE_TOOLCHAIN_FILE_PATH}
-          -DCMAKE_SYSTEM_PROCESSOR=${AUTOWARE_TARGET_ARCH}
-          -DCMAKE_PREFIX_PATH="${CI_PROJECT_DIR}/install;${AUTOWARE_SYSROOT}/opt/ros/${ROS_DISTRO}"
-          -DCMAKE_FIND_ROOT_PATH=${CI_PROJECT_DIR}/install
-  only:
-    - merge_requests
-    - as/master
 
 build_melodic:
   image: autonomoustuff/autoware:bleedingedge-melodic-base
   <<: *build_common
-
-build_melodic_cross:
-  image: autonomoustuff/autoware:${AUTOWARE_CROSS_TARGET_PLATFORM}-melodic-bleedingedge
-  variables:
-    ROS_DISTRO: melodic
-    <<: *build_cross_vars
-  <<: *build_cross_common
+  only:
+    - merge_requests
+    - as/master
